@@ -8,7 +8,6 @@ middleware stack
 - expector: https://github.com/mucbuc/expector
 
 ## how to use 
-
 ```  
 var count = 0; 
 stack
@@ -47,3 +46,7 @@ another
 hit count: 3
 { prop: 'value' } { status: 1 }
 ```
+
+## run the test
+`npm install`  
+`npm test`
