@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "chai": "*"
+  },
+  "scripts": {
+    "test": "mocha -u tdd --recursive"
+  },
+  "name": "flow-troll",
+  "description": "middleware stack",
+  "version": "0.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "mocha": "*",
+    "expector": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/mucbuc/flow-troll.git"
+  }
+}
