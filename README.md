@@ -4,11 +4,11 @@ flow-troll
 middleware stack
 
 ## dependencies: (tests only) 
-- mochajs: https://github.com/mochajs/mocha
+- chai: https://github.com/chaijs/chai
 - expector: https://github.com/mucbuc/expector
+- mocha: https://github.com/mochajs/mocha
 
 ## how to use 
-
 ```  
 var count = 0; 
 stack
@@ -21,7 +21,7 @@ stack
   })
   .use( 'filter', function(o) {
     o.input.prop = "value";
-    o.output.status = 1;
+    o.status = 1;
     o.next(); 
   })
   .use( /noop/, function(o) {
@@ -34,7 +34,7 @@ stack
     console.log( 'another' );
   })
   .process('filter', function(o) {
-    console.log( o.input, o.output ); 
+    console.log( o.input, o.status ); 
   });
 ```
 output:
@@ -47,3 +47,7 @@ another
 hit count: 3
 { prop: 'value' } 1
 ```
+
+## run the test
+`npm install`  
+`npm test`
