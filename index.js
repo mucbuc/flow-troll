@@ -1,21 +1,20 @@
-var assert = require( 'assert' );
+var assert = require( 'chai' ).assert;
 
 function Stack() {
 
   var layers = [];
 
   this.use = function() {
+    var context = {};
     if (arguments.length == 1) {
-      layers.push( { 
-        invoke: arguments[0] 
-      } ); 
+      assert.typeOf( arguments[0], 'function', 'Stack.use: expecting function as single argument' ); 
+      context.invoke = arguments[0]; 
     }
     else if (arguments.length == 2) {
-      layers.push( { 
-        filter: arguments[0], 
-        invoke: arguments[1] 
-      } );
+      context.filter = arguments[0];
+      context.invoke = arguments[1];
     }
+    layers.push( context );
     return this;
   };
 
