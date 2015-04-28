@@ -10,7 +10,7 @@ module.exports = function(stack, cb){
     })
     .use( 'filter', function(o) {
       o.input.prop = "value";
-      o.output.status = 1;
+      o.status = 1;
       o.next(); 
     })
     .use( /noop/, function(o) {
@@ -20,9 +20,9 @@ module.exports = function(stack, cb){
     .process()
     .process('noop')
     .process(function() {
-      console.log( 'anoter' );
+      console.log( 'another' );
     })
     .process('filter', function(o) {
-      console.log( o.input, o.output ); 
+      console.log( o.input, o.status ); 
     });
 };

@@ -5,8 +5,17 @@ function Stack() {
   var layers = [];
 
   this.use = function() {
-    
-    layers.push( arguments ); 
+    if (arguments.length == 1) {
+      layers.push( { 
+        invoke: arguments[0] 
+      } ); 
+    }
+    else if (arguments.length == 2) {
+      layers.push( { 
+        filter: arguments[0], 
+        invoke: arguments[1] 
+      } );
+    }
     return this;
   };
 
@@ -15,80 +24,50 @@ function Stack() {
     var index = 0
       , originalInput = ''
       , callBack = function() {}
-      , inputCache
-      , outputCache;
+      , contextCache;
 
-    switch (arguments.length) {
-      case 2:
-        originalInput = arguments[0];
-        callBack = arguments[1]; 
-        break;
-      case 1:
-        var type = typeof arguments[0];
-        if (type === 'function') {
-          callBack = arguments[0];
-        }
-        else if (type === 'string') {
-          originalInput = arguments[0];
-        }      
-        break;
+    if (arguments.length == 2) {
+      originalInput = arguments[0];
+      callBack = arguments[1]; 
     }
-  
-    assert(typeof originalInput !== 'undefined' );
-    assert(typeof callBack === 'function');
-
-    processNext( { input: originalInput, output: {} } ); 
+    else if (arguments.length == 1) {
+      var type = typeof arguments[0];
+      if (type === 'function') {
+        callBack = arguments[0];
+      }
+      else if (type === 'string') {
+        originalInput = arguments[0];
+      }      
+    }
+    
+    processNext( { input: originalInput } ); 
 
     return this; 
 
-    function processNext(options) {
+    function processNext(context) {
 
-      if (typeof options === 'undefined') {
-        options = { 
-          input: inputCache, 
-          output: outputCache
-        }; 
+      if (typeof context === 'undefined') {
+        context = contextCache; 
       }
       else {
-          if (options.hasOwnProperty('input')) {
-            inputCache = options.input;
-          }
-          options.input = inputCache;
-      
-          if (options.hasOwnProperty('output')) {
-            outputCache = options.output; 
-          }
-          options.output = outputCache;
+        contextCache = context;
       }
 
       if (index < layers.length) {
-        process( layers[index++] );
-      } 
-      else {
-        callBack( options );
-      }  
-
-      function process( layer ) {
-
-        if (layer.length == 1) {
-          layer[0]( layerOptions() );
-        }
-        else if (  layer.length == 2
-                && originalInput.match( layer[0]) ) {
-          layer[1]( layerOptions() );
+        var layer = layers[index++];
+        if (  !layer.hasOwnProperty('filter')
+           || originalInput.match(layer.filter) ) {
+          context.next = processNext;
+          layer.invoke( context );
         }
         else {
-          processNext(options);
+          processNext(context);
         }
-
-        function layerOptions() {
-          return { 
-            input: options.input, 
-            output: options.output, 
-            next: processNext
-          };
-        }
-      }
+      } 
+      else {
+        delete context.next;
+        callBack( context );
+      }  
     }
   };
 

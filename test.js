@@ -104,19 +104,19 @@ suite( 'flow-troll', function() {
   test( 'output object', function() {
     stack
       .use( function(o) {
-        assert( !o.output.hasOwnProperty("tester") );
-        o.output.tester = 'hey';
+        assert( !o.hasOwnProperty("tester") );
+        o.tester = 'hey';
         o.next();
       })
       .use( function(o) {
-        assert( !o.output.hasOwnProperty("tester2") );
-        assert( o.output.hasOwnProperty("tester") );
-        o.output.tester2 = 'hey';
+        assert( !o.hasOwnProperty("tester2") );
+        assert( o.hasOwnProperty("tester") );
+        o.tester2 = 'hey';
         o.next();
       })
       .process( function(o) {
-        assert( o.output.hasOwnProperty("tester") );
-        assert( o.output.hasOwnProperty("tester2") );
+        assert( o.hasOwnProperty("tester") );
+        assert( o.hasOwnProperty("tester2") );
       });
   });
 
@@ -133,11 +133,21 @@ suite( 'flow-troll', function() {
   test( 'output cache', function() {
     stack
       .use( function(o) {
-        o.output.sub = "hello";
+        o.sub = "hello";
         o.next();
       })
       .process( function(o) {
-        assert( o.output.hasOwnProperty( "sub" ) );
+        assert( o.hasOwnProperty( "sub" ) );
+      });
+  });
+
+  test( 'final context doesn\'t have next', function() {
+    stack
+      .use( function(o) {
+        o.next();
+      })
+      .process( function(o) {
+        assert( !o.hasOwnProperty( 'next' ) );
       });
   });
 

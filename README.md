@@ -45,5 +45,5 @@ got nooped
 hit count: 2
 another
 hit count: 3
-{ prop: 'value' } { status: 1 }
+{ prop: 'value' } 1
 ```
