@@ -63,20 +63,23 @@ suite( 'flow-troll', function() {
 
   test( 'output object next', function() {
     
+    var obj1 = { wtf: 'aarg' }
+      , obj2 = { sob: 'asddfadsf' };
+
     expector
-      .expect( JSON.stringify( { wtf: 'aarg' } ) )
-      .expect( JSON.stringify( { sob: 'asddfadsf' } ) );
+      .expect( obj1 )
+      .expect( obj2 );
 
     stack
       .use(function(o) {
-        o.next( { output: { wtf:'aarg'} });
+        o.next( { output: obj1 });
       })
       .use(function(o) {
-        expector.emit( JSON.stringify( o.output ) );
-        o.next( { output: { sob: 'asddfadsf' } });
+        expector.emit( o.output );
+        o.next( { output: obj2 });
       })
       .process( function(o) {
-        expector.emit( JSON.stringify( o.output ) );
+        expector.emit( o.output );
       });
   });
 
