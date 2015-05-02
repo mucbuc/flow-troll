@@ -64,19 +64,19 @@ suite( 'flow-troll', function() {
   test( 'output object next', function() {
     
     expector
-      .expect( { wtf: 'aarg' } )
-      .expect( { sob: 'asddfadsf' } );
+      .expect( JSON.stringify( { wtf: 'aarg' } ) )
+      .expect( JSON.stringify( { sob: 'asddfadsf' } ) );
 
     stack
       .use(function(o) {
         o.next( { output: { wtf:'aarg'} });
       })
       .use(function(o) {
-        expector.emit( o.output );
+        expector.emit( JSON.stringify( o.output ) );
         o.next( { output: { sob: 'asddfadsf' } });
       })
       .process( function(o) {
-        expector.emit( o.output );
+        expector.emit( JSON.stringify( o.output ) );
       });
   });
 
