@@ -193,6 +193,15 @@ suite( 'flow-troll', function() {
     }
   });
 
+  test( 'next is bound correctly', function() {
+    var s = new Stack();
+    s.use( function( o ) {
+      assert( o.next.toString() == 'function () { [native code] }' );
+    } );
+
+    s.process();
+  });
+
   test( 'simple_example', function() {
     require( './example.js' )(stack, function(res) {
     });

@@ -56,7 +56,7 @@ function Stack() {
         var layer = layers[index++];
         if (  !layer.hasOwnProperty('filter')
            || originalInput.match(layer.filter) ) {
-          context.next = processNext;
+          context.next = processNext.bind(this);
           layer.invoke( context );
         }
         else {
